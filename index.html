@@ -1,196 +1,252 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neura Protocol Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-const questions = [
-  {
-    q: "What is Neura?",
-    options: [
-      "A layer-2 rollup on Ethereum",
-      "A sovereign, EVM-compatible Layer 1 blockchain for real-time finance and stablecoins",
-      "A decentralized exchange protocol",
-      "A privacy coin",
-    ],
-    answer: 1,
-  },
-  {
-    q: "Which stablecoin is native to Neura and used for gasless transfers?",
-    options: ["USDT", "USDC", "$USN", "DAI"],
-    answer: 2,
-  },
-  {
-    q: "Which consensus mechanism does Neura use to achieve deterministic finality and avoid forks?",
-    options: ["Proof of Work", "Tendermint", "QBFT", "Delegated Proof of Stake"],
-    answer: 2,
-  },
-  {
-    q: "Which of the following is not a key differentiator claimed by Neura?",
-    options: [
-      "Gasless stablecoin transfers",
-      "Sovereign infrastructure (owning physical hardware)",
-      "Privacy by default (zero-knowledge encryption for all txns)",
-      "Sustainable revenues via RPCfi, MEV, OEV",
-    ],
-    answer: 2,
-  },
-  {
-    q: "What does RPCfi refer to in Neura’s design?",
-    options: [
-      "A caching layer for RPC calls",
-      "A revenue primitive that monetizes RPC infrastructure usage",
-      "A bridge protocol",
-      "A token swap mechanism",
-    ],
-    answer: 1,
-  },
-  {
-    q: "Which token(s) can be used as whitelisted gas assets in Neura (besides $USN)?",
-    options: ["Only $ETH", "Only $ANKR", "$ANKR and others", "No other token allowed"],
-    answer: 2,
-  },
-  {
-    q: "What layer(s) does Neura claim to control (sovereign) in its infrastructure stack?",
-    options: [
-      "Only the protocol (software) layer",
-      "Only the validator / consensus layer",
-      "Physical hardware, network / fiber, and protocol layers",
-      "Only cloud / virtual infrastructure",
-    ],
-    answer: 2,
-  },
-  {
-    q: "Which design goal ensures that Neura transactions settle instantly and predictably?",
-    options: [
-      "High gas fees",
-      "Eventual consistency",
-      "Sub-second block times and instant finality",
-      "Sharding",
-    ],
-    answer: 2,
-  },
-  {
-    q: "How does Neura intend to support cross-chain interoperability?",
-    options: [
-      "It doesn’t support cross-chain transfers",
-      "Through its own built-in sharding protocol",
-      "Using canonical bridge contracts and validators to verify cross-chain messages",
-      "Via centralized custodians",
-    ],
-    answer: 2,
-  },
-  {
-    q: "Which of the following is not a revenue source mentioned in Neura’s tokenomics model?",
-    options: ["RPCfi usage revenues", "MEV capture", "Inflationary token emissions", "Reserve yield recycling"],
-    answer: 2,
-  },
-];
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
 
-export default function App() {
-  const [name, setName] = useState("");
-  const [started, setStarted] = useState(false);
-  const [current, setCurrent] = useState(0);
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
+        header {
+            margin-bottom: 30px;
+        }
 
-  const handleAnswer = (i) => {
-    if (i === questions[current].answer) {
-      setScore(score + 1);
-    }
-    if (current + 1 < questions.length) {
-      setCurrent(current + 1);
-    } else {
-      setFinished(true);
-    }
-  };
+        header h1 {
+            font-size: 2.5em;
+            color: #00ff88; /* Green accent for "Neura" theme */
+            margin: 0;
+        }
 
-  const handleShare = () => {
-    const text = `I just scored ${score}/${questions.length} in the Gsenti Quiz! 🚀`;
-    const url = "https://www.gsenti.xyz/";
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        text
-      )}&url=${encodeURIComponent(url)}`,
-      "_blank"
-    );
-  };
+        header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
 
-  return (
-    <div
-      className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center p-6"
-      style={{ backgroundImage: "url('/background.jpg')" }}
-    >
-      {!started ? (
-        <div className="bg-white/80 p-6 rounded-2xl shadow-lg text-center">
-          <img
-            src="/logo.png"
-            alt="Gsenti Logo"
-            className="mx-auto mb-4 animate-bounce w-16 h-16"
-          />
-          <h1 className="text-2xl font-bold mb-4">
-            Welcome to Gsenti Protocol Quiz
-          </h1>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="border p-2 rounded w-full mb-4"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <button
-            disabled={!name}
-            onClick={() => setStarted(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-          >
-            Start Quiz
-          </button>
-        </div>
-      ) : (
-        <div className="max-w-xl w-full p-6 shadow-lg rounded-2xl bg-white/90">
-          {!finished ? (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">
-                {questions[current].q}
-              </h2>
-              <div className="grid gap-3">
-                {questions[current].options.map((opt, i) => (
-                  <button
-                    key={i}
-                    className="border px-4 py-2 rounded text-left hover:bg-gray-100"
-                    onClick={() => handleAnswer(i)}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-              <p className="mt-4 text-sm text-gray-500">
-                Question {current + 1} of {questions.length}
-              </p>
+        button {
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #00cc6a;
+        }
+
+        button:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+
+        #question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background-color: #333;
+            border: 2px solid #444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: left;
+        }
+
+        .option:hover {
+            background-color: #444;
+        }
+
+        .option.selected {
+            background-color: #00ff88;
+            color: #000;
+        }
+
+        #next-btn {
+            margin-top: 20px;
+        }
+
+        #start-screen, #result-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        #result-score {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Neura Protocol Quiz</h1>
+            <p>Test your knowledge on Neura's sovereign blockchain for stablecoins and DeFi!</p>
+        </header>
+        
+        <div id="quiz-container">
+            <div id="question-container" style="display: none;">
+                <h2 id="question"></h2>
+                <div id="options"></div>
+                <button id="next-btn" onclick="nextQuestion()" disabled>Next</button>
             </div>
-          ) : (
-            <div className="text-center">
-              <h2 className="text-xl font-bold mb-4">Quiz Finished!</h2>
-              <p className="text-lg">
-                {name}, your Score: {score} / {questions.length}
-              </p>
-              <button
-                className="bg-green-600 text-white px-4 py-2 rounded mt-4 mr-2"
-                onClick={() => {
-                  setCurrent(0);
-                  setScore(0);
-                  setFinished(false);
-                  setStarted(false);
-                }}
-              >
-                Restart Quiz
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-                onClick={handleShare}
-              >
-                Share on Twitter
-              </button>
+            
+            <div id="start-screen">
+                <button id="start-btn" onclick="startQuiz()">Start Quiz</button>
             </div>
-          )}
+            
+            <div id="result-screen" style="display: none;">
+                <h2 id="result-title"></h2>
+                <p id="result-score"></p>
+                <button onclick="restartQuiz()">Restart Quiz</button>
+            </div>
         </div>
-      )}
     </div>
-  );
-}
+    
+    <script>
+        const quizData = [
+            {
+                question: "What is Neura primarily designed for?",
+                options: ["General-purpose smart contracts", "Stablecoins, DeFi, and real-time digital finance", "Social media platforms", "Gaming ecosystems"],
+                correct: 1
+            },
+            {
+                question: "What consensus mechanism does Neura use?",
+                options: ["Proof-of-Work", "QBFT (Quorum Byzantine Fault Tolerance)", "Proof-of-Stake", "Delegated Proof-of-Stake"],
+                correct: 1
+            },
+            {
+                question: "What is $USN backed by?",
+                options: ["Bitcoin reserves", "A diversified basket of GENIUS-Act–compliant and yield-bearing stablecoins", "Fiat currency only", "Gold and commodities"],
+                correct: 1
+            },
+            {
+                question: "What is RPCfi in Neura?",
+                options: ["A type of cryptocurrency", "A value primitive that turns RPC infrastructure spending into on-chain yield", "A bridging protocol", "A governance token"],
+                correct: 1
+            },
+            {
+                question: "What is the primary benefit of Neura's sovereign infrastructure stack?",
+                options: ["Higher transaction fees", "Sub-second block times and instant finality with full control over hardware and network", "Reliance on public internet", "Inflationary token emissions"],
+                correct: 1
+            },
+            {
+                question: "How many cities is Neura's physical network deployed across at launch?",
+                options: ["3 cities", "12 cities across 7 countries and 4 continents", "50 cities", "1 city only"],
+                correct: 1
+            },
+            {
+                question: "What client does Neura's Layer 1 blockchain use?",
+                options: ["Geth", "Hyperledger Besu", "Cosmos SDK", "Substrate"],
+                correct: 1
+            },
+            {
+                question: "What mechanism does Neura use for $ANKR tokens during transactions?",
+                options: ["Minting new tokens", "Real-time burning of a percentage of fees", "Staking rewards", "Airdrops"],
+                correct: 1
+            },
+            {
+                question: "What is a key compliance feature of Neura?",
+                options: ["No audits required", "Programmable geo-fencing and SOC 2 Type II compliant nodes", "Anonymous transactions only", "Centralized control"],
+                correct: 1
+            },
+            {
+                question: "What is the total supply of $ANKR tokens?",
+                options: ["1 billion", "10 billion", "100 billion", "Unlimited"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = -1;
+
+        function startQuiz() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const qData = quizData[currentQuestion];
+            document.getElementById('question').textContent = qData.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            qData.options.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = option;
+                div.onclick = () => selectOption(index);
+                optionsContainer.appendChild(div);
+            });
+            
+            document.getElementById('next-btn').disabled = true;
+            selectedOption = -1;
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            selectedOption = index;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedOption === quizData[currentQuestion].correct) {
+                score++;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('result-title').textContent = percentage >= 70 ? 'Excellent! You understand Neura Protocol.' : 'Good effort! Review the docs and try again.';
+            document.getElementById('result-score').textContent = `You scored ${score} out of ${quizData.length} (${percentage}%)`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
