@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 
 const questions = [
   {
@@ -60,7 +58,12 @@ const questions = [
   },
   {
     q: "Which design goal ensures that Neura transactions settle instantly and predictably?",
-    options: ["High gas fees", "Eventual consistency", "Sub-second block times and instant finality", "Sharding"],
+    options: [
+      "High gas fees",
+      "Eventual consistency",
+      "Sub-second block times and instant finality",
+      "Sharding",
+    ],
     answer: 2,
   },
   {
@@ -80,7 +83,7 @@ const questions = [
   },
 ];
 
-export default function GsentiQuiz() {
+export default function App() {
   const [name, setName] = useState("");
   const [started, setStarted] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -99,9 +102,14 @@ export default function GsentiQuiz() {
   };
 
   const handleShare = () => {
-    const text = `I just scored ${score}/${questions.length} in the Gsenti Quiz! 🚀`; 
+    const text = `I just scored ${score}/${questions.length} in the Gsenti Quiz! 🚀`;
     const url = "https://www.gsenti.xyz/";
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, "_blank");
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        text
+      )}&url=${encodeURIComponent(url)}`,
+      "_blank"
+    );
   };
 
   return (
@@ -111,8 +119,14 @@ export default function GsentiQuiz() {
     >
       {!started ? (
         <div className="bg-white/80 p-6 rounded-2xl shadow-lg text-center">
-          <img src="/logo.png" alt="Gsenti Logo" className="mx-auto mb-4 animate-bounce w-16 h-16" />
-          <h1 className="text-2xl font-bold mb-4">Welcome to Gsenti Protocol Quiz</h1>
+          <img
+            src="/logo.png"
+            alt="Gsenti Logo"
+            className="mx-auto mb-4 animate-bounce w-16 h-16"
+          />
+          <h1 className="text-2xl font-bold mb-4">
+            Welcome to Gsenti Protocol Quiz
+          </h1>
           <input
             type="text"
             placeholder="Enter your name"
@@ -120,42 +134,62 @@ export default function GsentiQuiz() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Button disabled={!name} onClick={() => setStarted(true)}>
+          <button
+            disabled={!name}
+            onClick={() => setStarted(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          >
             Start Quiz
-          </Button>
+          </button>
         </div>
       ) : (
-        <Card className="max-w-xl w-full p-6 shadow-lg rounded-2xl bg-white/90">
-          <CardContent>
-            {!finished ? (
-              <div>
-                <h2 className="text-lg font-semibold mb-4">{questions[current].q}</h2>
-                <div className="grid gap-3">
-                  {questions[current].options.map((opt, i) => (
-                    <Button
-                      key={i}
-                      variant="outline"
-                      className="justify-start text-left"
-                      onClick={() => handleAnswer(i)}
-                    >
-                      {opt}
-                    </Button>
-                  ))}
-                </div>
-                <p className="mt-4 text-sm text-gray-500">
-                  Question {current + 1} of {questions.length}
-                </p>
+        <div className="max-w-xl w-full p-6 shadow-lg rounded-2xl bg-white/90">
+          {!finished ? (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">
+                {questions[current].q}
+              </h2>
+              <div className="grid gap-3">
+                {questions[current].options.map((opt, i) => (
+                  <button
+                    key={i}
+                    className="border px-4 py-2 rounded text-left hover:bg-gray-100"
+                    onClick={() => handleAnswer(i)}
+                  >
+                    {opt}
+                  </button>
+                ))}
               </div>
-            ) : (
-              <div className="text-center">
-                <h2 className="text-xl font-bold mb-4">Quiz Finished!</h2>
-                <p className="text-lg">{name}, your Score: {score} / {questions.length}</p>
-                <Button className="mt-4 mr-2" onClick={() => { setCurrent(0); setScore(0); setFinished(false); }}>Restart Quiz</Button>
-                <Button className="mt-4" onClick={handleShare}>Share on Twitter</Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              <p className="mt-4 text-sm text-gray-500">
+                Question {current + 1} of {questions.length}
+              </p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <h2 className="text-xl font-bold mb-4">Quiz Finished!</h2>
+              <p className="text-lg">
+                {name}, your Score: {score} / {questions.length}
+              </p>
+              <button
+                className="bg-green-600 text-white px-4 py-2 rounded mt-4 mr-2"
+                onClick={() => {
+                  setCurrent(0);
+                  setScore(0);
+                  setFinished(false);
+                  setStarted(false);
+                }}
+              >
+                Restart Quiz
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                onClick={handleShare}
+              >
+                Share on Twitter
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
